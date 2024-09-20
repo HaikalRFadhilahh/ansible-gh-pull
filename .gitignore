@@ -1,0 +1,4 @@
+vars/gh.yaml
+.vscode
+inventory/*
+ssh_keys/*

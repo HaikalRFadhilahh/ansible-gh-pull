@@ -1,0 +1,22 @@
+- name: Pulling Source Code
+  hosts: server
+  vars_files:
+    - ~/Documents/Ansible/latihan-ansible/vars/gh.yaml
+  tasks:
+    - name: Check Dir
+      ansible.builtin.stat:
+        path: /var/www/html/haik-portofolio
+      register: check_dir
+    - name: Clone Project
+      expect:
+        command: git clone https://github.com/HaikalRFadhilahh/haik-portofolio-static.git /var/www/html/haik-portofolio
+        responses:
+          Username: "{{ GH_USERNAME }}" # Username is a regex
+          Password: "{{ GH_TOKEN }}" # Password is a regex
+      no_log: true
+      when: not check_dir.stat.exists
+    - name: Update Repository
+      become: yes
+      ansible.builtin.apt:
+        state: present
+        update_cache: true
